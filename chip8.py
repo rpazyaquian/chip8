@@ -19,6 +19,8 @@ width = 640
 window.height = height + (margin*2)
 window.width = width + (margin*2)
 
+batch = pyg.graphics.Batch()
+
 
 # Game properties
 
@@ -76,8 +78,10 @@ def draw_square(tl, br):
 	global window
 
 	# begins drawing from the lower left. remember this.
+
 	pyg.graphics.draw(3, pyg.gl.GL_TRIANGLES, ('v2i', (tl[0]+margin, window.height-tl[1]-margin, tl[0]+margin, window.height-br[1]-margin, br[0]+margin, window.height-br[1]-margin)))  # (0,0), (0, 10), (10, 10)
 	pyg.graphics.draw(3, pyg.gl.GL_TRIANGLES, ('v2i', (br[0]+margin, window.height-br[1]-margin, br[0]+margin, window.height-tl[1]-margin, tl[0]+margin, window.height-tl[1]-margin)))  # (10, 10), (10, 0), (0, 10)
+
 
 @window.event
 def on_draw():
@@ -209,6 +213,7 @@ def command_to_opcode(command):  # command should be a tuple from short_to_comma
 		if ((a == 0 and b == 14) and c == 0):
 			# clear_screen():
 				# set screen to all 0's
+			screen = [[0 for _ in xrange(64)] for _ in xrange(32)]
 			return 'Clear the screen.'
 		elif ((a == 0 and b == 14) and c == 14):
 			# return_subroutine():
@@ -220,7 +225,6 @@ def command_to_opcode(command):  # command should be a tuple from short_to_comma
 			return '0{0:x}{1:x}{2:x} - Call RCA-1802 program from 0x{0:x}{1:x}{2:x}. (this is the original interpreter)'.format(a, b, c)
 	elif op == 1:
 		if (pc) == ((insn & 0xFFF) + 2):
-			break
 			# print "Infinite loop detected, program over."
 			# raw_input()
 			pc = insn & 0xFFF
@@ -339,7 +343,7 @@ def command_to_opcode(command):  # command should be a tuple from short_to_comma
 			v[a] = delay
 			return 'F{0:x}07 - Set V{0:x} to value of delay timer.'.format(a)
 		elif (b == 0 and c == 10):
-			key_codes = {0: 0, 1:1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15}
+			key_codes = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, 'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15}
 			key = raw_input('Enter a key (0, 1, 2, a, b, f, etc.): ')  # temporary solution until i can get keylogging going
 			v[a] = key_codes[key]
 			return 'F{0:x}0A - A key press is awaited, and then stored in V{0:x}.'.format(a)

@@ -1,0 +1,10 @@
+
+*.txt
+
+*.ch8
+
+*.c8x
+
+*.html
+
+.DS_Store
