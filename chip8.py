@@ -273,10 +273,10 @@ def command_to_opcode(command):  # command should be a tuple from short_to_comma
 		elif c == 4:
 			if (v[a] + v[b]) > 0xFF:
 				v[15] = 1
-				v[b] += v[a]
-				v[b] -= 0xFF
+				v[a] += v[b]
+				v[a] -= 0xFF
 			else:
-				v[b] += v[a]
+				v[a] += v[b]
 				v[15] = 0
 			return '8{0:x}{1:x}4 - Adds V{0:x} to V{1:x}. VF is set to 1 when there\'s a carry, and to 0 when there isn\'t.'.format(a, b)
 		elif c == 5:

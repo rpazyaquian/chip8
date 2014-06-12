@@ -1,5 +1,9 @@
 // Auxiliary functions
 
+function randrange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 function create_ram(size) {
 
     var ram_size = size;
@@ -29,6 +33,10 @@ function create_screen(height, width) {
     }
     
     return screen;
+}
+
+function create_sprite_array(height) {
+    sprite_array = // finish me!
 }
 
 // Rendering functions
@@ -114,11 +122,95 @@ function ld_byte(x, nn) {
 
 function add_byte(x, nn){
     v[x] += nn;
+    if (v[x] > 0xFF) {
+        v[x] -= 0xFF;
+    }
 }
 
 function ld_reg(x, y) {
     v[x] = v[y];
 }
+
+function or_reg(x, y) {
+    v[x] = (v[x] | v[y]);
+}
+
+function and_reg(x, y) {
+    v[x] = (v[x] & v[y]);
+}
+
+function xor_reg(x, y) {
+    v[x] = (v[x] ^ v[y]);
+}
+
+function add_reg(x, y) {
+    if ((v[x] + v[y]) > 0xFF) {
+        v[15] = 1;
+        v[x] += v[y];
+        v[x] -= 0xFF;
+    } else {
+        v[15] = 0;
+        v[x] += v[y];
+    }
+}
+
+function sub_reg(x, y) {
+    if (v[x] > v[y]) {
+        v[15] = 1;
+        v[x] -= v[y];
+    } else {
+        // eg: v[x] = 9, v[y] = 10
+        v[15] = 0;
+        v[x] -= v[y];  // 9 - 10 = -1
+        v[x] = (v[x] & 0xFF); // -1 & 0xFF = 0xFF, 0 & 0xFF = 0, -2 & 0xFF = 0xFE, etc.
+    }
+}
+
+function shr(x) {
+    v[15] = (v[x] & 1);
+    v[x] = (v[x] >> 1);
+}
+
+function subn(x, y) {
+    if (v[y] > v[x]) {
+        v[15] = 1;
+        v[x] = (v[y] - v[x]);
+    } else {
+        // eg v[x] = 10, v[y] = 9
+        v[15] = 0;
+        v[x] = (v[y] - v[x]);  // v[x] = (9 - 10) = -1 - will give negative number
+        v[x] = (v[x] & 0xFF); // -1 & 0xFF = 0xFF, 0 & 0xFF = 0, -2 & 0xFF = 0xFE, etc.
+    }
+}
+
+function shl(x) {
+    v[15] = (v[x] & 1);
+    v[x] = (v[x] << 1);
+}
+
+function sne_reg(x, y) {
+    if (v[x] != v[y]) {
+        pc += 2;
+    }
+}
+
+function ld_i(nnn) {
+    i = nnn;
+}
+
+function jump_v0(nnn) {
+    pc = (nnn + v[0]);
+}
+
+function rnd_reg(x, nn) {
+    v[x] = (randrange(0, 255) & nn);
+}
+
+function draw(x, y, n) {
+    // uhhhh
+}
+
+
 
 function command_to_opcode(command) {
 
@@ -160,31 +252,31 @@ function command_to_opcode(command) {
         
         case 3:
             
-            // se_byte(command.x, command.nn);
+            se_byte(command.x, command.nn);
             
             break;
         
         case 4:
             
-            // sne_byte(command.x, command.nn);
+            sne_byte(command.x, command.nn);
             
             break;
         
         case 5:
             
-            // se_reg(command.x, command.y);
+            se_reg(command.x, command.y);
             
             break;
         
         case 6:
             
-            // ld_byte(command.x, command.nn);
+            ld_byte(command.x, command.nn);
             
             break;
         
         case 7:
             
-            // add_byte(command.x, command.nn);
+            add_byte(command.x, command.nn);
             
             break;
         
@@ -194,50 +286,50 @@ function command_to_opcode(command) {
             
                 case 0:
                     
-                    // ld_reg(command.x, command.y);
+                    ld_reg(command.x, command.y);
                     
                     break;
                 case 1:
                     
-                    // or_reg(command.x, command.y);
+                    or_reg(command.x, command.y);
                     
                     break;
                 case 2:
                     
-                    // and_reg(command.x, command.y);
+                    and_reg(command.x, command.y);
                     
                     break;
                 case 3:
                     
-                    // xor_reg(command.x, command.y);
+                    xor_reg(command.x, command.y);
                     
                     break;
                 case 4:
                     
-                    // add_reg(command.x, command.y);
+                    add_reg(command.x, command.y);
                     
                     break;
                 case 5:
                     
-                    // sub_reg(command.x, command.y);
+                    sub_reg(command.x, command.y);
                     
                     break;
                 case 6:
                     
                     // shift right 1
-                    // shr(command.x);
+                    shr(command.x);
                     
                     break;
                 case 7:
                     
                     // set vx to (vx - vy)
-                    // subn(command.x, command.y);
+                    subn(command.x, command.y);
                     
                     break;
                 case 14:
                     
                     // shift left 1
-                    // shl(command.x);
+                    shl(command.x);
                     
                     break;
             
@@ -247,33 +339,33 @@ function command_to_opcode(command) {
         
         case 9:
             
-            // sne_reg(command.x, command.y);
+            sne_reg(command.x, command.y);
             
             break;
         
         case 10:
             
-            // ld_i(command.nnn);
+            ld_i(command.nnn);
             
             break;
         
         case 11:
             
             // jump to NNN + V0
-            // jump_v0(command.nnn)
+            jump_v0(command.nnn)
             
             break;
         
         case 12:
             
             // set VX to (random number & NN)
-            // rnd_reg(command.x, command.nn);
+            rnd_reg(command.x, command.nn);
             
             break;
         
         case 13:
             
-            // draw(command.x, command.y, command.n);
+            draw(command.x, command.y, command.n);
             
             break;
         
@@ -283,12 +375,12 @@ function command_to_opcode(command) {
             
                 case 158:
                     
-                    // skp(command.x);
+                    skp(command.x);
                     
                     break;
                 case 161:
                     
-                    // sknp(command.x);
+                    sknp(command.x);
                     
                     break;
                 default:
@@ -306,55 +398,55 @@ function command_to_opcode(command) {
 
                 case 7:
 
-                    // ld_delay(command.x);
+                    ld_delay(command.x);
                     break;
 
                 case 10:
 
-                    // ld_key(command.x);
+                    ld_key(command.x);
                     break;
 
                 case 21:
 
-                    // set_delay(command.x);
+                    set_delay(command.x);
                     break;
 
                 case 24:
 
-                    // set_sound(command.x);
+                    set_sound(command.x);
                     break;
 
                 case 30:
 
                     // set i to (i + vx)
-                    // add_i(command.x);
+                    add_i(command.x);
                     break;
 
                 case 41:
 
                     // set i to location of sprite for character X. (e.g. 0, 1, E, F)
-                    // i_font(command.x);
+                    i_font(command.x);
 
                     break;
 
                 case 51:
 
                     // store binary-coded decimal rep of VX, hundreds digit @ I, tens digit @ I+1, ones digit @ I+2
-                    // bin(command.x); 
+                    bin(command.x); 
 
                     break;
 
                 case 85:
 
                     // store v0 to vx in memory starting at I
-                    // save(command.x);
+                    mem_save(command.x);
 
                     break;
 
                 case 101:
 
                     // fill v0 to vx with values from memory starting at I
-                    // load(command.x)
+                    mem_load(command.x)
 
                     break;
 
