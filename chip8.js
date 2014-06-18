@@ -322,9 +322,7 @@ function set_vx_to_random_number_and_nn(x, nn) {
 }
 
 function draw_n_large_sprite_at_vx_vy(x, y, n) {
-    // uhhhh
-    // come back to this...
-    
+
     console.log('draw n large sprite at (vx, vy)');
     
     s_array = create_sprite_array(n);
@@ -745,7 +743,7 @@ function load_program() {
 
 // Main program functions
 
-function initialize() {
+function initialize_chip8() {
     screen = create_screen(32, 64);
 
     ram = create_ram(4096);
@@ -764,11 +762,30 @@ function initialize() {
 
     delay = 60;
 
-    keys = {};  // will eventually contain switches (e.g. keys[0] = false)!
+    keys = {
+        48: false, // 0
+        49: false, // 1
+        50: false, // 2
+        51: false, // 3
+        52: false, // 4
+        53: false, // 5
+        54: false, // 6
+        55: false, // 7
+        56: false, // 8
+        57: false, // 9
+        65: false, // a
+        66: false, // b
+        67: false, // c
+        68: false, // d
+        69: false, // e
+        70: false // f
+    };  // will eventually contain switches (e.g. keys[0] = false)!
 
     program = [0xa2, 0x1e, 0xc2, 0x01, 0x32, 0x01, 0xa2, 0x1a, 0xd0, 0x14, 0x70, 0x04, 0x30, 0x40, 0x12, 0x00, 0x60, 0x00, 0x71, 0x04, 0x31, 0x20, 0x12, 0x00, 0x12, 0x18, 0x80, 0x40, 0x20, 0x10, 0x20, 0x40, 0x80, 0x10];
 
     load_program();
+
+    draw_screen(screen, ctx);
 
 }
 
@@ -788,24 +805,9 @@ function run_opcode() {
 
 }
 
-// var main = setInterval(function() {
-//     if (end_loop == false) {
-//         frame_loop();
-//     } else {
-//         console.log('Infinite loop detected, exiting program.');
-//         clearInterval(main);
-//     }
-// }, (1000/60));
-
-// function run() {
-
-//     end_loop = false;
-//     console.log(main);
-// }
-
 function set_run_status(bool) {
     if(bool) {
-        initialize();
+        initialize_chip8();
         timer = setInterval(function() {
             frame_loop();
         }, 1000/60);
