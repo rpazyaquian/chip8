@@ -44,7 +44,13 @@ stop_button.click(function(e) {
 
 input_form.submit(function(e) {
 	e.preventDefault();
-	console.log(input_form.val());
+	parsed_program = input_form.val().replace(/ /g, '').match(/.{1,2}/g);
+	for (var i = 0; i < parsed_program.length; i++) {
+		parsed_program[i] = parseInt(parsed_program[i], 16);
+	}
+	program = parsed_program;
+	console.log(parsed_program);
+
 });
 
 submit_button.click(function(e) {
@@ -52,11 +58,20 @@ submit_button.click(function(e) {
 	input_form.submit();
 });
 
+// Key logging
+
 $(document).keydown(function(e) {
 	e.preventDefault();
 
 	if (!keys[e.which] && keys.hasOwnProperty(e.which)) {
+		// keydown_event = true;
+		// captured_key = key_reverse[e.which];
+
+		// keydown_event = false;
+		// captured_key = 0;
+
 		keys[e.which] = true;
+		// console.log(keys);
 	}
 
 });
@@ -66,8 +81,7 @@ $(document).keyup(function(e) {
 
 	if (keys[e.which] && keys.hasOwnProperty(e.which)) {
 		keys[e.which] = false;
+		// console.log(keys);
 	}
 
 });
-
-// Misc
