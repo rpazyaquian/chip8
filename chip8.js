@@ -95,10 +95,10 @@ function draw_screen(screen, context) {
             var value = screen[i][j];
             
             if (value === 0) {
-                context.fillStyle = '#000000';
+                context.fillStyle = off_color;
                 context.fillRect(j*tile_res, i*tile_res, tile_res, tile_res);
             } else {
-                context.fillStyle = '#FFFFFF';
+                context.fillStyle = on_color;
                 context.fillRect(j*tile_res, i*tile_res, tile_res, tile_res);
             }
         }
@@ -111,7 +111,7 @@ function draw_screen(screen, context) {
 
 function clear_screen() {
     
-    console.log('clear screen');
+    // console.log('clear screen');
 
     for (var i = 0; i < screen.length; i++) {
         for (var j = 0; j < screen[i].length; j++) {
@@ -123,7 +123,7 @@ function clear_screen() {
 
 function return_from_stack() {
     
-    console.log('return from stack');
+    // console.log('return from stack');
 
     sp -= 1;
     pc = stack[sp];
@@ -132,7 +132,7 @@ function return_from_stack() {
 
 function jump(nnn) {
     
-    console.log('jump to address');
+    // console.log('jump to address');
 
     // if the address being jumped to is equal to the program counter minus 2, i.e. there is a loop occurring, stop the entire program.
 
@@ -147,26 +147,26 @@ function jump(nnn) {
 
 function call_stack(nnn) {
     
-    console.log('call stack');
+    // console.log('call stack');
 
-    console.log(stack);
-    console.log(sp);
-    console.log(pc);
-    console.log(nnn);
+    // console.log(stack);
+    // console.log(sp);
+    // console.log(pc);
+    // console.log(nnn);
 
     stack[sp] = pc;
     sp++;
     pc = nnn;
 
-    console.log(stack);
-    console.log(sp);
-    console.log(pc);
+    // console.log(stack);
+    // console.log(sp);
+    // console.log(pc);
 
 }
 
 function skip_if_vx_equal_nn(x, nn) {
     
-    console.log('skip if vx == nn');
+    // console.log('skip if vx == nn');
 
     if (v[x] === nn) {
         pc += 2;
@@ -176,7 +176,7 @@ function skip_if_vx_equal_nn(x, nn) {
 
 function skip_if_vx_not_equal_nn(x, nn) {
     
-    console.log('skip if vx != nn');
+    // console.log('skip if vx != nn');
     
     if (v[x] !== nn) {
         pc += 2;
@@ -185,7 +185,7 @@ function skip_if_vx_not_equal_nn(x, nn) {
 
 function skip_if_vx_equal_vy(x, y) {
     
-    console.log('skip if vx == vy');
+    // console.log('skip if vx == vy');
     
     if (v[x] === v[y]) {
         pc += 2;
@@ -194,14 +194,14 @@ function skip_if_vx_equal_vy(x, y) {
 
 function set_vx_to_nn(x, nn) {
     
-    console.log('set v'+x+' to '+nn);
+    // console.log('set v'+x+' to '+nn);
     
     v[x] = nn;
 }
 
 function add_nn_to_vx(x, nn){
     
-    console.log('add '+nn+' to v'+x);
+    // console.log('add '+nn+' to v'+x);
     
     v[x] += nn;
     if (v[x] > 0xFF) {
@@ -211,35 +211,35 @@ function add_nn_to_vx(x, nn){
 
 function set_vx_to_vy(x, y) {
     
-    console.log('set vx to vy');
+    // console.log('set vx to vy');
     
     v[x] = v[y];
 }
 
 function set_vx_to_vx_or_vy(x, y) {
     
-    console.log('set vx to (vx || vy)');
+    // console.log('set vx to (vx || vy)');
     
     v[x] = (v[x] | v[y]);
 }
 
 function set_vx_to_vx_and_vy(x, y) {
     
-    console.log('set vx to (vx && vy)');
+    // console.log('set vx to (vx && vy)');
     
     v[x] = (v[x] & v[y]);
 }
 
 function set_vx_to_vx_xor_vy(x, y) {
     
-    console.log('set vx to (vx ^ vy)');
+    // console.log('set vx to (vx ^ vy)');
     
     v[x] = (v[x] ^ v[y]);
 }
 
 function add_vy_to_vx(x, y) {
         
-    console.log('add vy to vx');
+    // console.log('add vy to vx');
     
     // vf is set to 1 when there is a carry (vx + vy > 255), set to 0 when there isn't
     if ((v[x] + v[y]) > 0xFF) {
@@ -254,7 +254,7 @@ function add_vy_to_vx(x, y) {
 
 function subtract_vy_from_vx(x, y) {
     
-    console.log('subtract vy from vx');
+    // console.log('subtract vy from vx');
     
     // vf is set to 0 when there's a borrow (vx - vy < 0), set to 1 when there isn't
     if (v[x] > v[y]) {
@@ -270,7 +270,7 @@ function subtract_vy_from_vx(x, y) {
 
 function shift_vx_right(x) {
     
-    console.log('shift vx right by 1');
+    // console.log('shift vx right by 1');
     
     // vf is set to the value of the least significant ('rightmost') bit before the shift
     v[15] = (v[x] & 1);
@@ -279,7 +279,7 @@ function shift_vx_right(x) {
 
 function set_vx_to_vy_minus_vx(x, y) {
     
-    console.log('set vx to (vy minus vx)');
+    // console.log('set vx to (vy minus vx)');
     
     // vf is set to 0 when there's a borrow, set to 1 when there isn't
     if (v[y] > v[x]) {
@@ -295,7 +295,7 @@ function set_vx_to_vy_minus_vx(x, y) {
 
 function shift_vx_left(x) {
     
-    console.log('shift vx left by 1');
+    // console.log('shift vx left by 1');
     
     // vf is set to the value of the most significant ('leftmost') bit before the shift
     v[15] = (v[x] & 0x80) >> 7;  // e.g. (0x7F & 0x80) --> (0111 1111 & 1000 0000), >> 7 = 0. basically, vf = 0 if vx < 128, else vf = 1.  (this works, iirc)
@@ -320,7 +320,7 @@ function shift_vx_left(x) {
 
 function skip_if_vx_not_equal_vy(x, y) {
     
-    console.log('skip next instruction if vx is not equal to vy');
+    // console.log('skip next instruction if vx is not equal to vy');
     
     if (v[x] != v[y]) {
         pc += 2;
@@ -329,28 +329,28 @@ function skip_if_vx_not_equal_vy(x, y) {
 
 function set_index_to_nnn(nnn) {
     
-    console.log('set index to nnn (nnn is already translated to decimal)');
+    // console.log('set index to nnn (nnn is already translated to decimal)');
     
     index = nnn;
 }
 
 function jump_to_nnn_plus_v0(nnn) {
     
-    console.log('jump to (nnn + v0)');
+    // console.log('jump to (nnn + v0)');
     
     pc = (nnn + v[0]);
 }
 
 function set_vx_to_random_number_and_nn(x, nn) {
     
-    console.log('set vx to (random number && nn)');
+    // console.log('set vx to (random number && nn)');
     
     v[x] = (randrange(0, 255) & nn);
 }
 
 function draw_n_large_sprite_at_vx_vy(x, y, n) {
 
-    console.log('draw n large sprite at (vx, vy)');
+    // console.log('draw n large sprite at (vx, vy)');
     
     s_array = create_sprite_array(n);
     draw_sprite(s_array, v[x], v[y]); // oh god i'm an idiot
@@ -358,7 +358,7 @@ function draw_n_large_sprite_at_vx_vy(x, y, n) {
 
 function skip_if_key_with_value_vx_is_pressed(x) {
 
-    console.log('skip if key with value vx is pressed');
+    // console.log('skip if key with value vx is pressed');
 
     key_on_off = keys[key_translations[v[x]]];  // v[x] = 0, key_trans[0] = 48, keys[48] = true or false
 
@@ -369,7 +369,7 @@ function skip_if_key_with_value_vx_is_pressed(x) {
 
 function skip_if_key_with_value_vx_is_not_pressed(x) {
 
-    console.log('skip if key with value vx is not pressed');
+    // console.log('skip if key with value vx is not pressed');
 
     key_on_off = keys[key_translations[v[x]]];  // v[x] = 0, key_trans[0] = 48, keys[48] = true or false
 
@@ -380,83 +380,67 @@ function skip_if_key_with_value_vx_is_not_pressed(x) {
 
 function set_vx_to_value_of_delay_timer(x) {
     
-    console.log('set vx to value of delay timer');
+    // console.log('set vx to value of delay timer');
     
     v[x] = delay;
 }
 
 function await_key_and_store_in_vx(x) {
 
-    // current approach:
-    // start a while loop, and while this loop is running,
-    // if a key press happens,
-    // set a variable key_pressed to "true".
-    // the while loop continues while key_pressed is false.
-    // therefore, it looks something like this:
+    pc -= 2;  // decrement the pc by two so the paused opcodes will begin here again
 
-    // key_pressed = false
-    // while !key_pressed:
-    //  if (keydown_event occurs):
-    //      v[x] = key_reverse[keydown_event.key_code]  // e.g., v[x] = key_reverse[54] --> v[x] = 6
-    //      key_pressed = true;
-    //
-    // when a keydown event occurs, the keycode is matched with its corresponding integer,
-    // and that integer is stored in v[x].
-    // the while !key_pressed loop is then set to false, since
-    // key_pressed is now true.
-    // the loop breaks, and the program can continue.
+    // console.log(waiting_for_key);
 
-    // pretty sure CHIP-8 dates from before threading was a thing,
-    // so this behavior isn't so bad.
-    // right?
+    // if we are not waiting for a key and captured_key < 0:
+        // 
+    // else if we are not waiting for a key and captured key >= 0 (i.e. was assigned a value by jquery):
+        //
+    // else we are waiting for a key anddddd wait, no.
+        // as it is right now, there is no way that waiting_for_key can be true when coming into this opcode
+        // if waiting_for_key is true before we run an opcode, then...doesn't it break out of the for loop?
+    // so the question is, is captured_key < 0 (i.e. did we just assign it or has it been reset)?
 
-    // WRONG!
-    // it's fucked. it hangs for some reason and that's annoying as hell.
-
-    console.log('await key press and store value of key in vx');
-
-    // key_press = false;
-    // keydown_event = false;
-
-    // while (!key_press) {
-    //     if (keydown_event) {
-    //         v[x] = captured_key;
-    //         key_press = true;
-    //     }
-    // }
+    if (!waiting_for_key && captured_key < 0) {
+        waiting_for_key = true;
+    } else {
+        v[x] = captured_key;
+        waiting_for_key = false;
+        captured_key = -1;  // reset captured key for the next time this opcode occurs
+        pc += 2;
+    }
     
 }
 
 function set_delay_to_vx(x) {
     
-    console.log('set delay timer to vx');
+    // console.log('set delay timer to vx');
     
     delay = v[x];
 }
 
 function set_sound_to_vx(x) {
     
-    console.log('set sound timer to vx');
+    // console.log('set sound timer to vx');
     
     sound = v[x];
 }
 
 function add_vx_to_index(x) {
     
-    console.log('add vx to index');
+    // console.log('add vx to index');
     
     index = (index + v[x]);
 }
 
 function set_index_to_location_of_sprite_for_vx(x) {
 
-    console.log('set index to location of sprite for digit '+x);
-    index = x * 5;
+    // console.log('set index to location of sprite for digit '+x);
+    index = v[x] * 5;
 }
 
 function store_binary_coded_rep_of_vx(x) {
 
-    console.log('store binary coded rep of vx');
+    // console.log('store binary coded rep of vx');
 
     ones = v[x] % 10;
     tens = Math.floor(v[x] / 10) % 10; // 254 / 10 --> 25, 25 % 10 --> 5
@@ -469,7 +453,7 @@ function store_binary_coded_rep_of_vx(x) {
 
 function store_v0_to_vx_in_memory_starting_at_index(x) {
 
-    console.log('store v0 to vx in memory starting at index');
+    // console.log('store v0 to vx in memory starting at index');
 
     for (var i = 0; i < x+1; i++) {
         ram[index+i] = v[i];
@@ -478,7 +462,7 @@ function store_v0_to_vx_in_memory_starting_at_index(x) {
 
 function fill_v0_to_vx_from_memory_starting_at_index(x) {
 
-    console.log('fill v0 to vx from memory starting at index');
+    // console.log('fill v0 to vx from memory starting at index');
 
     for (var i = 0; i < x+1; i++) {
         v[i] = ram[index+i];
@@ -504,7 +488,7 @@ function command_to_opcode(command) {
                     break;
                     
                 default:
-                    console.log("invalid opcode");
+                    // console.log("invalid opcode");
                     break;
             
             }
@@ -658,7 +642,7 @@ function command_to_opcode(command) {
                     
                     break;
                 default:
-                    console.log('invalid opcode');
+                    // console.log('invalid opcode');
                     break;
             
             }
@@ -729,7 +713,7 @@ function command_to_opcode(command) {
             break;
         
         default:
-            console.log('invalid opcode');
+            // console.log('invalid opcode');
     
     }
 }
@@ -778,42 +762,45 @@ canvas.setAttribute("width", width.toString());
 
 program = [0xa2, 0x1e, 0xc2, 0x01, 0x32, 0x01, 0xa2, 0x1a, 0xd0, 0x14, 0x70, 0x04, 0x30, 0x40, 0x12, 0x00, 0x60, 0x00, 0x71, 0x04, 0x31, 0x20, 0x12, 0x00, 0x12, 0x18, 0x80, 0x40, 0x20, 0x10, 0x20, 0x40, 0x80, 0x10];
 
+off_color = "#000000";
+on_color = "#FFFFFF";
+
 key_translations = {
-    0: 48, // 0
+    0: 88, // 0
     1: 49, // 1
     2: 50, // 2
     3: 51, // 3
-    4: 52, // 4
-    5: 53, // 5
-    6: 54, // 6
-    7: 55, // 7
-    8: 56, // 8
-    9: 57, // 9
-    10: 65, // a
-    11: 66, // b
-    12: 67, // c
-    13: 68, // d
-    14: 69, // e
-    15: 70 // f
+    4: 81, // 4
+    5: 87, // 5
+    6: 69, // 6
+    7: 65, // 7
+    8: 83, // 8
+    9: 68, // 9
+    10: 90, // a
+    11: 67, // b
+    12: 52, // c
+    13: 82, // d
+    14: 70, // e
+    15: 86 // f
 };
 
 key_reverse = {
-    48: 0, // 0
+    88: 0, // 0
     49: 1, // 1
     50: 2, // 2
     51: 3, // 3
-    52: 4, // 4
-    53: 5, // 5
-    54: 6, // 6
-    55: 7, // 7
-    56: 8, // 8
-    57: 9, // 9
-    65: 10, // a
-    66: 11, // b
-    67: 12, // c
-    68: 13, // d
-    69: 14, // e
-    70: 15 // f
+    81: 4, // 4
+    87: 5, // 5
+    69: 6, // 6
+    65: 7, // 7
+    83: 8, // 8
+    68: 9, // 9
+    90: 10, // a
+    67: 11, // b
+    52: 12, // c
+    82: 13, // d
+    70: 14, // e
+    86: 15 // f
 };
 
 function load_program() {
@@ -829,22 +816,22 @@ function load_font() {
     // 0x000 through (5 * 16 = 80) 0x50(?)/0x4F(?), anyway the first 80 bytes in ram are font data.
 
     font_data = [
-    0xF0, 0x90, 0x90, 0x90, 0xF0,
-    0x20, 0x60, 0x20, 0x20, 0x70,
-    0xF0, 0x10, 0xF0, 0x80, 0xF0,
-    0xF0, 0x10, 0xF0, 0x10, 0xF0,
-    0x90, 0x90, 0xF0, 0x10, 0x10,
-    0xF0, 0x80, 0xF0, 0x10, 0xF0,
-    0xF0, 0x80, 0xF0, 0x90, 0xF0,
-    0xF0, 0x10, 0x20, 0x40, 0x40,
-    0xF0, 0x90, 0xF0, 0x90, 0xF0,
-    0xF0, 0x90, 0xF0, 0x10, 0xF0,
-    0xF0, 0x90, 0xF0, 0x90, 0x90,
-    0xE0, 0x90, 0xE0, 0x90, 0xE0,
-    0xF0, 0x80, 0x80, 0x80, 0xF0,
-    0xE0, 0x90, 0x90, 0x90, 0xE0,
-    0xF0, 0x80, 0xF0, 0x80, 0xF0,
-    0xF0, 0x80, 0xF0, 0x80, 0x80
+        0xF0, 0x90, 0x90, 0x90, 0xF0,
+        0x20, 0x60, 0x20, 0x20, 0x70,
+        0xF0, 0x10, 0xF0, 0x80, 0xF0,
+        0xF0, 0x10, 0xF0, 0x10, 0xF0,
+        0x90, 0x90, 0xF0, 0x10, 0x10,
+        0xF0, 0x80, 0xF0, 0x10, 0xF0,
+        0xF0, 0x80, 0xF0, 0x90, 0xF0,
+        0xF0, 0x10, 0x20, 0x40, 0x40,
+        0xF0, 0x90, 0xF0, 0x90, 0xF0,
+        0xF0, 0x90, 0xF0, 0x10, 0xF0,
+        0xF0, 0x90, 0xF0, 0x90, 0x90,
+        0xE0, 0x90, 0xE0, 0x90, 0xE0,
+        0xF0, 0x80, 0x80, 0x80, 0xF0,
+        0xE0, 0x90, 0x90, 0x90, 0xE0,
+        0xF0, 0x80, 0xF0, 0x80, 0xF0,
+        0xF0, 0x80, 0xF0, 0x80, 0x80
     ];
 
     for (var i = 0; i<font_data.length; i++) {
@@ -874,23 +861,27 @@ function initialize_chip8() {
     delay = 60;
 
     keys = {
-        48: false, // 0
+        88: false, // 0
         49: false, // 1
         50: false, // 2
         51: false, // 3
-        52: false, // 4
-        53: false, // 5
-        54: false, // 6
-        55: false, // 7
-        56: false, // 8
-        57: false, // 9
-        65: false, // a
-        66: false, // b
-        67: false, // c
-        68: false, // d
-        69: false, // e
-        70: false // f
+        81: false, // 4
+        87: false, // 5
+        69: false, // 6
+        65: false, // 7
+        83: false, // 8
+        68: false, // 9
+        90: false, // a
+        67: false, // b
+        52: false, // c
+        82: false, // d
+        70: false, // e
+        86: false // f
     };
+
+    waiting_for_key = false;
+
+    captured_key = -1;
 
     load_font();
 
@@ -904,8 +895,13 @@ function frame_loop() {
 
     // this is run every 1/60th of a second
 
-    for (var i = 0; i < 10; i++) {  // run ten opcodes   
-        run_opcode();
+    // console.log('running loop');
+
+    if (!waiting_for_key) {
+        for (var i = 0; i < 10; i++) {  // run ten opcodes   
+            run_opcode();
+            if (waiting_for_key) break;
+        }
     }
 
     // don't forget to count down the timers!

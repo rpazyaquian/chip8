@@ -1,4 +1,5 @@
 // Helper functions
+
 function strip_whitespace(string) {
 
 	// the approach to loading a program input by the user will be to:
@@ -14,7 +15,6 @@ function strip_whitespace(string) {
 // Initialize on load
 
 $(document).ready(function() {
-	console.log('starting...');
 	initialize_chip8();
 });
 
@@ -34,6 +34,7 @@ submit_button = $('#submit-program');
 
 run_button.click(function(e) {
 	e.preventDefault();
+	input_form.submit();
 	set_run_status(true);
 });
 
@@ -61,7 +62,8 @@ submit_button.click(function(e) {
 // Key logging
 
 $(document).keydown(function(e) {
-	e.preventDefault();
+
+	// console.log(e.which);
 
 	if (!keys[e.which] && keys.hasOwnProperty(e.which)) {
 		// keydown_event = true;
@@ -71,13 +73,18 @@ $(document).keydown(function(e) {
 		// captured_key = 0;
 
 		keys[e.which] = true;
+
+		if (waiting_for_key) {
+			captured_key = key_reverse[e.which];
+			waiting_for_key = false;
+		}
+
 		// console.log(keys);
 	}
 
 });
 
 $(document).keyup(function(e) {
-	e.preventDefault();
 
 	if (keys[e.which] && keys.hasOwnProperty(e.which)) {
 		keys[e.which] = false;
